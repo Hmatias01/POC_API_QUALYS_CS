@@ -30,15 +30,33 @@ QSCANNER_PATH="$(find . -type f -name qscanner | head -n 1)"
 
 if [ -z "$QSCANNER_PATH" ]; then
   echo "ERRO: qscanner não encontrado."
+  find . -maxdepth 4 -type f
   exit 1
 fi
 
 chmod +x "$QSCANNER_PATH"
-
 echo "QScanner encontrado em: $QSCANNER_PATH"
 
+echo "Localizando Dockerfile..."
+DOCKERFILE_PATH="$(find . -type f -name Dockerfile | head -n 1)"
+
+if [ -z "$DOCKERFILE_PATH" ]; then
+  echo "ERRO: Dockerfile não encontrado no repositório."
+  find . -maxdepth 4 -type f
+  exit 1
+fi
+
+BUILD_CONTEXT="$(dirname "$DOCKERFILE_PATH")"
+
+echo "Dockerfile encontrado em: $DOCKERFILE_PATH"
+echo "Build context: $BUILD_CONTEXT"
+
 echo "Build da imagem Docker: $FULL_IMAGE"
-docker build -t "$FULL_IMAGE" .
+
+docker build \
+  -f "$DOCKERFILE_PATH" \
+  -t "$FULL_IMAGE" \
+  "$BUILD_CONTEXT"
 
 echo "Executando Qualys Policy Evaluation..."
 set +e
