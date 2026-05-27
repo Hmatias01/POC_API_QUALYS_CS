@@ -93,7 +93,7 @@ set +e
 "$QSCANNER_PATH" image "$FULL_IMAGE" \
   --pod "$QUALYS_POD" \
   --mode evaluate-policy \
-  --policy-tags "$POLICY_TAGS" \
+  --tags "$POLICY_TAGS" \
   --output-dir "$OUTPUT_DIR" \
   --report-format json,sarif,table \
   --file-logging
