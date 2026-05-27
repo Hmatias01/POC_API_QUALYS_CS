@@ -27,7 +27,7 @@ jobs:
           QUALYS_POD: US3
           IMAGE_NAME: poc-api-matias
           IMAGE_TAG: latest
-          POLICY_TAGS: "REPOSITÓRIO DO GITHUB"
+          POLICY_TAGS: "GITHUB_REPO"
         run: |
           chmod +x .github/qualys_container_scan.sh
           ./.github/qualys_container_scan.sh
