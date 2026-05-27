@@ -46,7 +46,7 @@ if [ -z "$DOCKERFILE_PATH" ]; then
   exit 1
 fi
 
-BUILD_CONTEXT="$(dirname "$DOCKERFILE_PATH")"
+BUILD_CONTEXT="."
 
 echo "Dockerfile encontrado em: $DOCKERFILE_PATH"
 echo "Build context: $BUILD_CONTEXT"
