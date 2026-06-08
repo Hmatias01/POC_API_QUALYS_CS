@@ -19,7 +19,8 @@ jobs:
       # 1. Build da imagem localmente para o scanner a encontrar
       # O Docker buscará um arquivo chamado "Dockerfile" na raiz
       - name: Build local image
-        run: docker build -t poc-api-matias:latest .
+        # O flag -f diz ao Docker exatamente onde o arquivo está
+        run: docker build -f .github/Dockerfile -t poc-api-matias:latest .
 
       # 2. Execução do script de scan
       - name: Run Qualys Container Security Scan
