@@ -10,19 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      issues: write
+      issues: write # Necessário para abrir/reabrir issues
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Necessário para o scanner encontrar a imagem
+      # 1. Build da imagem localmente para o scanner a encontrar
+      # O Docker buscará um arquivo chamado "Dockerfile" na raiz
       - name: Build local image
         run: docker build -t poc-api-matias:latest .
 
-      - name: Run Scan
+      # 2. Execução do script de scan
+      - name: Run Qualys Container Security Scan
         env:
           QUALYS_ACCESS_TOKEN: ${{ secrets.QUALYS_ACCESS_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUALYS_POD: US3
+          IMAGE_NAME: poc-api-matias
+          IMAGE_TAG: latest
           POLICY_TAGS: "POC_API_MATIAS"
         run: |
+          # Garante permissão de execução e executa o script na raiz
           chmod +x ./qualys_container_scan.sh
           ./qualys_container_scan.sh
