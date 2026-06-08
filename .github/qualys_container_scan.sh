@@ -14,7 +14,7 @@ IMAGE_TAG="${IMAGE_TAG:-latest}"
 FULL_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
 # Define a política solicitada
-POLICY_TAGS="${POLICY_TAGS:-POC_API_MATIAS}" 
+POLICY_TAGS="${POLICY_TAGS:-POC_API_MATIAS_v2}" 
 OUTPUT_DIR="${OUTPUT_DIR:-qualys-results}"
 
 # Validação obrigatória do token do Qualys
