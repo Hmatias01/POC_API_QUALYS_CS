@@ -1,8 +1,6 @@
 name: Qualys Container Security Scan
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -14,13 +12,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Image
-        run: docker build -t poc-api-matias:latest .
+      # Como a imagem é pública, não precisamos de 'docker build'.
+      # O próprio script fará o 'docker pull' da imagem.
 
       - name: Run Scan
         env:
           QUALYS_ACCESS_TOKEN: ${{ secrets.QUALYS_ACCESS_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Ajuste das variáveis para a nova imagem
+          IMAGE_NAME: "vulnerables/web-dvwa"
+          IMAGE_TAG: "latest"
+          POLICY_TAGS: "POC_API_MATIAS"
         run: |
           chmod +x ./qualys_container_scan.sh
           ./qualys_container_scan.sh
