@@ -1,0 +1,58 @@
+name: Qualys Container Security Scan
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  security-events: write
+
+jobs:
+  qualys-container-scan:
+
+    runs-on: ubuntu-latest
+
+    env:
+      QUALYS_ACCESS_TOKEN: ${{ secrets.QUALYS_ACCESS_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      QUALYS_POD: US3
+      IMAGE_NAME: vulnerables/web-dvwa
+      IMAGE_TAG: latest
+      POLICY_TAGS: GITHUB_REPO
+
+      OUTPUT_DIR: qualys-results
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Docker
+        run: docker --version
+
+      - name: Run Qualys Container Scan
+        run: |
+          chmod +x .github/qualys_container_scan.sh
+          ./.github/qualys_container_scan.sh
+
+      - name: Upload Qualys Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qualys-results
+          path: qualys-results/
+
+      - name: Upload SARIF to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: qualys-results
