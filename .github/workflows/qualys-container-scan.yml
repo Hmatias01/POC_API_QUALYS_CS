@@ -1,3 +1,11 @@
+name: Qualys Container Security Scan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
   qualys-scan:
     runs-on: ubuntu-latest
@@ -5,7 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ADICIONE ESTE PASSO: Construir a imagem localmente para que o scanner a encontre
       - name: Build local image
         run: docker build -t poc-api-matias:latest .
 
@@ -18,5 +25,5 @@ jobs:
           IMAGE_TAG: latest
           POLICY_TAGS: "POC_API_MATIAS"
         run: |
-          chmod +x .github/qualys_container_scan.sh
-          ./.github/qualys_container_scan.sh
+          chmod +x ./qualys_container_scan.sh
+          ./qualys_container_scan.sh
