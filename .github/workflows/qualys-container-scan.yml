@@ -12,21 +12,15 @@ jobs:
       contents: read
       issues: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Build da imagem (agora que o Dockerfile está na raiz)
-      - name: Build local image
+      - name: Build Image
         run: docker build -t poc-api-matias:latest .
 
       - name: Run Scan
         env:
           QUALYS_ACCESS_TOKEN: ${{ secrets.QUALYS_ACCESS_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Política atualizada conforme solicitado
-          POLICY_TAGS: "POC_API_MATIAS" 
-          IMAGE_NAME: poc-api-matias
-          IMAGE_TAG: latest
         run: |
           chmod +x ./qualys_container_scan.sh
           ./qualys_container_scan.sh
